@@ -70,6 +70,10 @@ Quick starting guide for new plugin devs:
 - After installing dependencies you can run the test suite with:
   - `npm test`
 
+## Generate documentation (optional)
+- [TypeDoc](https://typedoc.org/) can create HTML documentation from your TypeScript source.
+- After installing dependencies run:
+  - `npm run docs`
 
 ## Funding URL
 
