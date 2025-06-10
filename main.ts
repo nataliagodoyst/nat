@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, TextComponent } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -123,12 +123,12 @@ class SampleSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName('Setting #1')
 			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+                        .addText((text: TextComponent) => text
+                                .setPlaceholder('Enter your secret')
+                                .setValue(this.plugin.settings.mySetting)
+                                .onChange(async (value: string) => {
+                                        this.plugin.settings.mySetting = value;
+                                        await this.plugin.saveSettings();
+                                }));
 	}
 }
