@@ -1,8 +1,12 @@
-/*
+/* LoomNotes Companion theme */
+.lumi-chat {
+    padding: 10px;
+    font-size: 14px;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
+.lumi-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid var(--interactive-accent);
+    border-radius: 4px;
+}

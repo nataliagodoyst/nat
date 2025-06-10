@@ -1,16 +1,15 @@
-# Obsidian Sample Plugin
+# LoomNotes Companion
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+LoomNotes Companion enhances your Obsidian workflow with a collection of tools centred around daily notes and project management.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+Key features include:
+- The **Lumi** side panel (toggle with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>) for a conversational interface.
+- Template suggestions via the **Templater** plugin when creating new notes.
+- Commands for creating daily notes, drawing oracle cards, opening reflection prompts and starting new projects.
+- Automatic folder creation and icon assignment with **Iconize** integration.
+- A minimal custom theme for the Lumi panel.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+This project uses TypeScript for type checking and bundles the plugin using esbuild.
 
 ## First time developing plugins?
 
