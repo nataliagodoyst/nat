@@ -16,7 +16,7 @@ export class LumiPanel extends ItemView {
     return 'Lumi';
   }
 
-  onOpen(): void {
+  async onOpen(): Promise<void> {
     const container = this.containerEl.children[1];
     container.empty();
     const active = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -34,7 +34,7 @@ export class LumiPanel extends ItemView {
     };
   }
 
-  onClose(): void {
+  async onClose(): Promise<void> {
     const container = this.containerEl.children[1];
     container.empty();
   }

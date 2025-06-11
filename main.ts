@@ -83,6 +83,7 @@ export default class LoomNotesCompanion extends Plugin {
       return;
     }
     const leaf = this.app.workspace.getRightLeaf(false);
+    if (!leaf) return;
     await leaf.setViewState({ type: VIEW_TYPE_LUMI, active: true });
     this.app.workspace.revealLeaf(leaf);
   }
