@@ -7,6 +7,7 @@ LoomNotes Companion integrates the LoomNotes workflow into Obsidian. It brings t
 - **Lumi Reflection Panel**: Open the command `LoomNotes: Refletir com Lumi` to show a modal with your note's word count and an option to draw a card.
 - **Draw Oracle Cards**: `LoomNotes: Puxar Carta` inserts a random card (title, description and prompt) at the cursor position.
 - **Daily Note Start**: Use `LoomNotes: Iniciar Dia` to create today's note in the configured folder and automatically open the Lumi panel.
+- **Reflection Notes**: `LoomNotes: Abrir Reflexão` creates or opens today's reflection note and will create the reflections folder if it's missing.
 - **Configurable Daily Folder**: Change the location of daily notes from the plugin settings.
 
 ## Installation
@@ -28,9 +29,10 @@ Install each plugin from Obsidian's community plugins gallery and follow their s
 ## Usage
 
 1. Run **LoomNotes: Iniciar Dia** to create or open today's note. The plugin automatically creates the configured folder if it's missing and starts the note with the question *Como você se sente hoje?*.
-2. The Lumi modal opens. Click **Sortear Carta** if you want inspiration. The selected card appears in the modal.
-3. At any time you can use **LoomNotes: Puxar Carta** to insert a card in the active note.
-4. Adjust your daily note folder via **Settings → LoomNotes Companion**.
+2. Use **LoomNotes: Abrir Reflexão** to create or open today's reflection note, creating the reflections folder if needed.
+3. The Lumi modal opens. Click **Sortear Carta** if you want inspiration. The selected card appears in the modal.
+4. At any time you can use **LoomNotes: Puxar Carta** to insert a card in the active note.
+5. Adjust your daily note folder via **Settings → LoomNotes Companion**.
 
 ## Quick Start
 
