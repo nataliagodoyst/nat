@@ -1,9 +1,11 @@
 import { App, Modal, MarkdownView } from 'obsidian';
-import { drawCards } from './oracle';
+import { drawCards, OracleCard, defaultDeck } from './oracle';
 
 export class LumiModal extends Modal {
-  constructor(app: App) {
+  deck: OracleCard[];
+  constructor(app: App, deck: OracleCard[] = defaultDeck) {
     super(app);
+    this.deck = deck;
   }
 
   onOpen(): void {
@@ -16,7 +18,7 @@ export class LumiModal extends Modal {
     const button = contentEl.createEl('button', { text: 'Sortear Carta' });
     button.onclick = () => {
       contentEl.empty();
-      const [card] = drawCards(1);
+      const [card] = drawCards(1, this.deck);
       contentEl.createEl('h2', { text: card.title });
       contentEl.createEl('p', { text: card.description });
       contentEl.createEl('em', { text: card.prompt });
