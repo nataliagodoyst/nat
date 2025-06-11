@@ -23,3 +23,9 @@ test('draw card from deckJSON data', () => {
   const [card] = drawCards(1, parsed);
   expect(deck).toContainEqual(card);
 });
+
+test('draw multiple cards', () => {
+  const cards = drawCards(2, defaultDeck);
+  expect(cards.length).toBe(2);
+  cards.forEach((c) => expect(defaultDeck).toContainEqual(c));
+});
