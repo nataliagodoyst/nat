@@ -2,8 +2,6 @@ import { LumiModal } from '../src/lumiModal';
 import { updateIcons } from '../src/iconize';
 import { isTemplaterEnabled, showTemplatePicker } from '../src/templaterHelper';
 
-const LoomNotesCompanion = require('../main').default;
-
 jest.mock('../src/lumiModal', () => ({
   __esModule: true,
   LumiModal: jest.fn().mockImplementation(() => ({ open: jest.fn() })),
@@ -35,6 +33,8 @@ jest.mock('obsidian', () => ({
   },
   TFile: class {},
 }), { virtual: true });
+
+const LoomNotesCompanion = require('../main').default;
 
 describe('startDay', () => {
   const date = '2024-01-01';
