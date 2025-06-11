@@ -31,6 +31,8 @@ jest.mock('../src/project', () => ({
   promptAndStartProject: jest.fn(),
 }));
 
+export {};
+
 jest.mock('obsidian', () => ({
   Plugin: class {},
   PluginSettingTab: class {},
