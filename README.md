@@ -1,95 +1,49 @@
 # LoomNotes Companion
 
-Companion plugin that brings the Lumi assistant and sorteio de cartas oraculares para o Obsidian.
-Ele oferece comandos para iniciar a nota diária, abrir o painel da Lumi e puxar cartas para inspiração.
+LoomNotes Companion integrates the LoomNotes workflow into Obsidian. It brings the Lumi assistant to your vault, helps you start a daily reflection note and lets you draw inspirational oracle cards.
 
-## First time developing plugins?
+## Key Features
 
-Quick starting guide for new plugin devs:
+- **Lumi Reflection Panel**: Open the command `LoomNotes: Refletir com Lumi` to show a modal with your note's word count and an option to draw a card.
+- **Draw Oracle Cards**: `LoomNotes: Puxar Carta` inserts a random card (title, description and prompt) at the cursor position.
+- **Daily Note Start**: Use `LoomNotes: Iniciar Dia` to create today's note in the configured folder and automatically open the Lumi panel.
+- **Configurable Daily Folder**: Change the location of daily notes from the plugin settings.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+## Installation
 
-## Releasing new versions
+1. Download the latest release or clone this repository.
+2. Copy `manifest.json`, `main.js` and `styles.css` to your vault folder at `.obsidian/plugins/loomnotes-companion/`.
+3. Reload Obsidian and enable **LoomNotes Companion** in *Community Plugins*.
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+## Required External Plugins
 
-- After updating `minAppVersion` manually in `manifest.json`, you can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major`.
-  This command updates `manifest.json` and `package.json` with the new version number and adds the entry for the new version to `versions.json`.
+The following plugins are recommended for automation and templates:
 
-## Adding your plugin to the community plugin list
+- **Templater** – create templates for your daily notes.
+- **Dataview** – query and summarize notes and cards.
+- **QuickAdd** – trigger LoomNotes commands through custom macros or hotkeys.
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+Install each plugin from Obsidian's community plugins gallery and follow their setup instructions.
 
-## How to use
+## Usage
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+1. Run **LoomNotes: Iniciar Dia** to create or open today's note. The note begins with the question *Como você se sente hoje?*.
+2. The Lumi modal opens. Click **Sortear Carta** if you want inspiration. The selected card appears in the modal.
+3. At any time you can use **LoomNotes: Puxar Carta** to insert a card in the active note.
+4. Adjust your daily note folder via **Settings → LoomNotes Companion**.
 
-## Manually installing the plugin
+## Quick Start
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+1. Install LoomNotes Companion and the recommended plugins.
+2. Restart Obsidian and enable all plugins.
+3. Run `LoomNotes: Iniciar Dia` from the command palette.
+4. Answer the prompt in the created note and use `LoomNotes: Puxar Carta` for extra insight.
+5. Explore Templater or Dataview to organise your reflections.
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code.
-- All dependencies are provided in `package.json`. Install them and run:
-  - `npm install`
-  - `npm run lint`
-- ESLint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can analyze all files in that folder with:
-  - `eslint .\src\`
+## Development
 
-## Running tests
-
-- [Jest](https://jestjs.io/) is set up with [ts-jest](https://kulshekhar.github.io/ts-jest/) for TypeScript unit tests.
-- After installing dependencies you can run the test suite with:
-  - `npm test`
-
-## Generate documentation (optional)
-- [TypeDoc](https://typedoc.org/) can create HTML documentation from your TypeScript source.
-- After installing dependencies run:
-  - `npm run docs`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
+Install dependencies with `npm i` and start the watcher with `npm run dev`. Run the test suite with `npm test`.
 
 ## API Documentation
 
-See https://github.com/obsidianmd/obsidian-api
+See [Obsidian API](https://github.com/obsidianmd/obsidian-api).
