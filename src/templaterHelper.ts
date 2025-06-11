@@ -7,12 +7,12 @@ export interface TemplaterPlugin {
 }
 
 export function getTemplaterPlugin(app: App): TemplaterPlugin | null {
-  const plugin = app.plugins.getPlugin('templater-obsidian');
-  return plugin as unknown as TemplaterPlugin | null;
+  const plugin = (app as any).plugins?.getPlugin?.('templater-obsidian');
+  return plugin ? (plugin as unknown as TemplaterPlugin) : null;
 }
 
 export function isTemplaterEnabled(app: App): boolean {
-  return getTemplaterPlugin(app) !== null && getTemplaterPlugin(app) !== undefined;
+  return getTemplaterPlugin(app) != null;
 }
 
 export function showTemplatePicker(app: App): boolean {
