@@ -55,4 +55,24 @@ describe('openReflection', () => {
     expect(create).toHaveBeenCalled();
     expect(openFile).toHaveBeenCalled();
   });
+
+  test('skips folder creation when folder already exists', async () => {
+    const createFolder = jest.fn();
+    const create = jest.fn().mockResolvedValue({});
+    const getAbstractFileByPath = jest
+      .fn()
+      .mockReturnValueOnce({}) // folder exists
+      .mockReturnValueOnce(null); // file check
+    const openFile = jest.fn();
+    const app = {
+      vault: { getAbstractFileByPath, create, createFolder },
+      workspace: { getLeaf: jest.fn().mockReturnValue({ openFile }) },
+    } as any;
+
+    await openReflection(app);
+
+    expect(createFolder).not.toHaveBeenCalled();
+    expect(create).toHaveBeenCalled();
+    expect(openFile).toHaveBeenCalled();
+  });
 });
