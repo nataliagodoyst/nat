@@ -17,8 +17,9 @@ describe('openReflection', () => {
   });
 
   test('creates folder when missing', async () => {
+    const file = {};
     const createFolder = jest.fn().mockResolvedValue(undefined);
-    const create = jest.fn().mockResolvedValue({});
+    const create = jest.fn().mockResolvedValue(file);
     const getAbstractFileByPath = jest
       .fn()
       .mockReturnValueOnce(null) // folder check
@@ -29,16 +30,21 @@ describe('openReflection', () => {
       workspace: { getLeaf: jest.fn().mockReturnValue({ openFile }) },
     } as any;
 
-    await openReflection(app);
+    const result = await openReflection(app);
 
     expect(createFolder).toHaveBeenCalledWith('Reflexoes');
-    expect(create).toHaveBeenCalled();
-    expect(openFile).toHaveBeenCalled();
+    expect(create).toHaveBeenCalledWith(
+      'Reflexoes/2024-01-01.md',
+      expect.stringContaining('# 2024-01-01')
+    );
+    expect(openFile).toHaveBeenCalledWith(file);
+    expect(result).toBe(file);
   });
 
   test('ignores folder creation errors', async () => {
+    const file = {};
     const createFolder = jest.fn().mockRejectedValue(new Error('fail'));
-    const create = jest.fn().mockResolvedValue({});
+    const create = jest.fn().mockResolvedValue(file);
     const getAbstractFileByPath = jest
       .fn()
       .mockReturnValueOnce(null)
@@ -49,10 +55,14 @@ describe('openReflection', () => {
       workspace: { getLeaf: jest.fn().mockReturnValue({ openFile }) },
     } as any;
 
-    await openReflection(app);
+    const result = await openReflection(app);
 
     expect(createFolder).toHaveBeenCalled();
-    expect(create).toHaveBeenCalled();
-    expect(openFile).toHaveBeenCalled();
+    expect(create).toHaveBeenCalledWith(
+      'Reflexoes/2024-01-01.md',
+      expect.stringContaining('# 2024-01-01')
+    );
+    expect(openFile).toHaveBeenCalledWith(file);
+    expect(result).toBe(file);
   });
 });
