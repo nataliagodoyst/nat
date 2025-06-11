@@ -85,6 +85,13 @@ export default class LoomNotesCompanion extends Plugin {
   async startDay() {
     const date = window.moment().format('YYYY-MM-DD');
     const folder = this.settings.dailyFolder;
+    if (!this.app.vault.getAbstractFileByPath(folder)) {
+      try {
+        await this.app.vault.createFolder(folder);
+      } catch {
+        // ignore if folder exists or cannot be created
+      }
+    }
     const path = `${folder}/${date}.md`;
     let file = this.app.vault.getAbstractFileByPath(path) as TFile;
     if (!file) {
