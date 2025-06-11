@@ -1,6 +1,6 @@
 import { LumiModal } from '../src/lumiModal';
 import { updateIcons } from '../src/iconize';
-import { isTemplaterEnabled, showTemplatePicker } from '../src/templaterHelper';
+import { isTemplaterEnabled, showTemplatePicker, applyTemplateToFile } from '../src/templaterHelper';
 
 jest.mock('../src/lumiModal', () => ({
   __esModule: true,
@@ -14,6 +14,7 @@ jest.mock('../src/iconize', () => ({
 jest.mock('../src/templaterHelper', () => ({
   isTemplaterEnabled: jest.fn(),
   showTemplatePicker: jest.fn(),
+  applyTemplateToFile: jest.fn(),
 }));
 
 jest.mock('obsidian', () => ({
@@ -59,7 +60,7 @@ describe('startDay', () => {
       vault: { getAbstractFileByPath, createFolder, create },
       workspace: { getLeaf: jest.fn(() => leaf) },
     });
-    plugin.settings = { dailyFolder: 'Diario', deckJSON: '' } as any;
+    plugin.settings = { dailyFolder: 'Diario', deckJSON: '', autoTemplates: false } as any;
 
     await plugin.startDay();
 
@@ -78,7 +79,7 @@ describe('startDay', () => {
       vault: { getAbstractFileByPath, createFolder, create },
       workspace: { getLeaf: jest.fn(() => leaf) },
     });
-    plugin.settings = { dailyFolder: 'Diario', deckJSON: '' } as any;
+    plugin.settings = { dailyFolder: 'Diario', deckJSON: '', autoTemplates: false } as any;
 
     await expect(plugin.startDay()).resolves.not.toThrow();
     expect(create).toHaveBeenCalled();
@@ -97,7 +98,7 @@ describe('startDay', () => {
       vault: { getAbstractFileByPath, createFolder, create },
       workspace: { getLeaf: jest.fn(() => ({ openFile })) },
     });
-    plugin.settings = { dailyFolder: 'Diario', deckJSON: '' } as any;
+    plugin.settings = { dailyFolder: 'Diario', deckJSON: '', autoTemplates: true } as any;
 
     await plugin.startDay();
 
@@ -107,7 +108,8 @@ describe('startDay', () => {
     expect(call[1]).toContain('Como você se sente hoje?');
     expect(openFile).toHaveBeenCalled();
     expect(updateIcons).toHaveBeenCalledWith(plugin.app, { Diario: 'calendar' });
-    expect(showTemplatePicker).toHaveBeenCalledWith(plugin.app);
+    expect(applyTemplateToFile).toHaveBeenCalledWith(plugin.app, expect.anything());
+    expect(showTemplatePicker).not.toHaveBeenCalled();
     const modal = (LumiModal as jest.Mock).mock.results[0].value;
     expect(modal.open).toHaveBeenCalled();
   });

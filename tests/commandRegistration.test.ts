@@ -69,6 +69,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -88,6 +89,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -108,6 +110,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -134,6 +137,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -163,6 +167,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -184,6 +189,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -193,7 +199,11 @@ describe('command registration', () => {
     expect(call).toBeDefined();
 
     call[0].callback();
-    expect(openReflection).toHaveBeenCalledWith(plugin.app);
+    expect(openReflection).toHaveBeenCalledWith(
+      plugin.app,
+      'Reflexoes',
+      plugin.settings.autoTemplates
+    );
   });
 
   test('loomnotes-start-project command invokes promptAndStartProject', async () => {
@@ -202,6 +212,7 @@ describe('command registration', () => {
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    plugin.settings = { autoTemplates: false, autoFolders: false } as any;
 
     await plugin.onload();
 
@@ -211,6 +222,10 @@ describe('command registration', () => {
     expect(call).toBeDefined();
 
     call[0].callback();
-    expect(promptAndStartProject).toHaveBeenCalledWith(plugin.app);
+    expect(promptAndStartProject).toHaveBeenCalledWith(
+      plugin.app,
+      'Projetos',
+      plugin.settings.autoTemplates
+    );
   });
 });
