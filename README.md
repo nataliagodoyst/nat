@@ -52,7 +52,15 @@ your theme to customize the appearance.
 
 Install dependencies with `npm i` and start the watcher with `npm run dev`. Run the test suite with `npm test`.
 
-When preparing a release run `npm version <patch|minor|major>`. The `version` script executes `version-bump.mjs`, which updates `manifest.json` and `versions.json` to the new version and stages both files. Open these files to confirm the new version has been written before pushing the commit and tag so `versions.json` is included in the release history.
+### Releasing
+
+1. Run `npm version <patch|minor|major>` to bump the package. This executes
+   `version-bump.mjs` which writes the new version to `manifest.json` and adds an
+   entry in `versions.json`.
+2. Check `git status` and open `manifest.json` and `versions.json` to verify the
+   version bump has been applied and both files are staged.
+3. Commit and push the resulting commit and tag so `versions.json` is archived
+   with every release.
 
 ## API Documentation
 
