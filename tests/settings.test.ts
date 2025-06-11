@@ -32,3 +32,26 @@ test('loadSettings parses custom deck JSON', async () => {
   await plugin.loadSettings();
   expect(plugin.deck).toEqual(deck);
 });
+
+test('saveSettings persists folder and custom deck', async () => {
+  const deck: OracleCard[] = [{ title: '1', description: '2', prompt: '3' }];
+  const plugin = new TestPlugin();
+  let stored: any = {};
+  plugin.loadData = jest.fn().mockResolvedValue({});
+  plugin.saveData = jest.fn(async (data) => {
+    stored = data;
+  });
+
+  await plugin.loadSettings();
+  plugin.settings.dailyFolder = 'Journal';
+  plugin.settings.deckJSON = JSON.stringify(deck);
+
+  await plugin.saveSettings();
+
+  plugin.loadData = jest.fn().mockResolvedValue(stored);
+  await plugin.loadSettings();
+
+  expect(plugin.settings.dailyFolder).toBe('Journal');
+  expect(plugin.settings.deckJSON).toBe(JSON.stringify(deck));
+  expect(plugin.deck).toEqual(deck);
+});
