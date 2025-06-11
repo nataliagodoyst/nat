@@ -10,6 +10,7 @@ import {
 import { LumiModal } from './src/lumiModal';
 import { drawCards } from './src/oracle';
 import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
+import { isTemplaterEnabled, showTemplatePicker } from './src/templaterHelper';
 
 interface LoomNotesSettings {
   dailyFolder: string;
@@ -73,6 +74,9 @@ export default class LoomNotesCompanion extends Plugin {
     }
     const leaf = this.app.workspace.getLeaf(true);
     await leaf.openFile(file);
+    if (isTemplaterEnabled(this.app)) {
+      showTemplatePicker(this.app);
+    }
     new LumiModal(this.app).open();
   }
 
