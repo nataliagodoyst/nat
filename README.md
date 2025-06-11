@@ -27,7 +27,7 @@ Install each plugin from Obsidian's community plugins gallery and follow their s
 
 ## Usage
 
-1. Run **LoomNotes: Iniciar Dia** to create or open today's note. The note begins with the question *Como você se sente hoje?*.
+1. Run **LoomNotes: Iniciar Dia** to create or open today's note. The plugin automatically creates the configured folder if it's missing and starts the note with the question *Como você se sente hoje?*.
 2. The Lumi modal opens. Click **Sortear Carta** if you want inspiration. The selected card appears in the modal.
 3. At any time you can use **LoomNotes: Puxar Carta** to insert a card in the active note.
 4. Adjust your daily note folder via **Settings → LoomNotes Companion**.
