@@ -10,19 +10,28 @@ import {
 import { LumiModal } from './src/lumiModal';
 import { drawCards, defaultDeck, OracleCard } from './src/oracle';
 import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
-import { isTemplaterEnabled, showTemplatePicker } from './src/templaterHelper';
+import {
+  isTemplaterEnabled,
+  showTemplatePicker,
+  applyTemplateToFile,
+} from './src/templaterHelper';
 import { openReflection } from './src/reflection';
 import { promptAndStartProject } from './src/project';
 import { updateIcons } from './src/iconize';
+import { createFolderIfMissing, suggestLoomNotesFolders } from './src/folders';
 
 interface LoomNotesSettings {
   dailyFolder: string;
   deckJSON: string;
+  autoTemplates: boolean;
+  autoFolders: boolean;
 }
 
 const DEFAULT_SETTINGS: LoomNotesSettings = {
   dailyFolder: 'Diario',
   deckJSON: '',
+  autoTemplates: true,
+  autoFolders: true,
 };
 
 export default class LoomNotesCompanion extends Plugin {
@@ -31,6 +40,10 @@ export default class LoomNotesCompanion extends Plugin {
 
   async onload() {
     await this.loadSettings();
+
+    if (this.settings.autoFolders) {
+      suggestLoomNotesFolders(this.app);
+    }
 
     this.registerView(VIEW_TYPE_LUMI, (leaf) => new LumiPanel(leaf, this.deck));
 
@@ -70,13 +83,13 @@ export default class LoomNotesCompanion extends Plugin {
     this.addCommand({
       id: 'loomnotes-open-reflection',
       name: 'LoomNotes: Abrir Reflexão',
-      callback: () => openReflection(this.app),
+      callback: () => openReflection(this.app, 'Reflexoes', this.settings.autoTemplates),
     });
 
     this.addCommand({
       id: 'loomnotes-start-project',
       name: 'LoomNotes: Iniciar Projeto',
-      callback: () => promptAndStartProject(this.app),
+      callback: () => promptAndStartProject(this.app, 'Projetos', this.settings.autoTemplates),
     });
 
     this.addSettingTab(new LoomNotesSettingTab(this.app, this));
@@ -85,22 +98,19 @@ export default class LoomNotesCompanion extends Plugin {
   async startDay() {
     const date = window.moment().format('YYYY-MM-DD');
     const folder = this.settings.dailyFolder;
-    if (!this.app.vault.getAbstractFileByPath(folder)) {
-      try {
-        await this.app.vault.createFolder(folder);
-      } catch {
-        // ignore if folder exists or cannot be created
-      }
-    }
+    await createFolderIfMissing(this.app, folder);
     const path = `${folder}/${date}.md`;
     let file = this.app.vault.getAbstractFileByPath(path) as TFile;
     if (!file) {
       file = await this.app.vault.create(path, `# ${date}\n\nComo você se sente hoje?\n`);
+      if (this.settings.autoTemplates) {
+        await applyTemplateToFile(this.app, file);
+      }
     }
     updateIcons(this.app, { [folder]: 'calendar' });
     const leaf = this.app.workspace.getLeaf(true);
     await leaf.openFile(file);
-    if (isTemplaterEnabled(this.app)) {
+    if (!this.settings.autoTemplates && isTemplaterEnabled(this.app)) {
       showTemplatePicker(this.app);
     }
     new LumiModal(this.app, this.deck).open();
@@ -179,6 +189,30 @@ class LoomNotesSettingTab extends PluginSettingTab {
             this.plugin.settings.deckJSON = value;
             await this.plugin.saveSettings();
             await this.plugin.loadSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName('Aplicar templates automaticamente')
+      .setDesc('Usar Templater para aplicar templates ao criar notas')
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.autoTemplates)
+          .onChange(async (value) => {
+            this.plugin.settings.autoTemplates = value;
+            await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName('Sugerir pastas padrão')
+      .setDesc('Criar pastas básicas do LoomNotes com ícones')
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.autoFolders)
+          .onChange(async (value) => {
+            this.plugin.settings.autoFolders = value;
+            await this.plugin.saveSettings();
           })
       );
   }
