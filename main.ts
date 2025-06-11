@@ -8,7 +8,7 @@ import {
   TFile,
 } from 'obsidian';
 import { LumiModal } from './src/lumiModal';
-import { drawCards } from './src/oracle';
+import { drawCards, defaultDeck, OracleCard } from './src/oracle';
 import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
 import { isTemplaterEnabled, showTemplatePicker } from './src/templaterHelper';
 import { openReflection } from './src/reflection';
@@ -17,24 +17,27 @@ import { updateIcons } from './src/iconize';
 
 interface LoomNotesSettings {
   dailyFolder: string;
+  deckJSON: string;
 }
 
 const DEFAULT_SETTINGS: LoomNotesSettings = {
   dailyFolder: 'Diario',
+  deckJSON: '',
 };
 
 export default class LoomNotesCompanion extends Plugin {
   settings: LoomNotesSettings;
+  deck: OracleCard[] = defaultDeck;
 
   async onload() {
     await this.loadSettings();
 
-    this.registerView(VIEW_TYPE_LUMI, (leaf) => new LumiPanel(leaf));
+    this.registerView(VIEW_TYPE_LUMI, (leaf) => new LumiPanel(leaf, this.deck));
 
     this.addCommand({
       id: 'open-lumi',
       name: 'LoomNotes: Refletir com Lumi',
-      callback: () => new LumiModal(this.app).open(),
+      callback: () => new LumiModal(this.app, this.deck).open(),
     });
 
     this.addCommand({
@@ -53,7 +56,7 @@ export default class LoomNotesCompanion extends Plugin {
           new Notice('Abra uma nota para inserir a carta');
           return;
         }
-        const [card] = drawCards(1);
+        const [card] = drawCards(1, this.deck);
         view.editor.replaceSelection(`**${card.title}** - ${card.description}\n_${card.prompt}_\n`);
       },
     });
@@ -93,7 +96,7 @@ export default class LoomNotesCompanion extends Plugin {
     if (isTemplaterEnabled(this.app)) {
       showTemplatePicker(this.app);
     }
-    new LumiModal(this.app).open();
+    new LumiModal(this.app, this.deck).open();
   }
 
   async toggleLumiPanel() {
@@ -116,6 +119,16 @@ export default class LoomNotesCompanion extends Plugin {
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    try {
+      const deck = this.settings.deckJSON ? JSON.parse(this.settings.deckJSON) : null;
+      if (Array.isArray(deck)) {
+        this.deck = deck;
+      } else {
+        this.deck = defaultDeck;
+      }
+    } catch {
+      this.deck = defaultDeck;
+    }
   }
 
   async saveSettings() {
@@ -145,6 +158,20 @@ class LoomNotesSettingTab extends PluginSettingTab {
           .onChange(async (value) => {
             this.plugin.settings.dailyFolder = value || 'Diario';
             await this.plugin.saveSettings();
+          })
+      );
+
+    new Setting(containerEl)
+      .setName('Baralho personalizado')
+      .setDesc('Cole o JSON de cartas para substituir o baralho padrão')
+      .addTextArea((text) =>
+        text
+          .setPlaceholder('[{"title":"Sol"}]')
+          .setValue(this.plugin.settings.deckJSON)
+          .onChange(async (value) => {
+            this.plugin.settings.deckJSON = value;
+            await this.plugin.saveSettings();
+            await this.plugin.loadSettings();
           })
       );
   }

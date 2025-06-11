@@ -1,11 +1,13 @@
 import { ItemView, WorkspaceLeaf, MarkdownView } from 'obsidian';
-import { drawCards } from './oracle';
+import { drawCards, OracleCard, defaultDeck } from './oracle';
 
 export const VIEW_TYPE_LUMI = 'lumi-panel';
 
 export class LumiPanel extends ItemView {
-  constructor(leaf: WorkspaceLeaf) {
+  deck: OracleCard[];
+  constructor(leaf: WorkspaceLeaf, deck: OracleCard[] = defaultDeck) {
     super(leaf);
+    this.deck = deck;
   }
 
   getViewType(): string {
@@ -27,7 +29,7 @@ export class LumiPanel extends ItemView {
     const button = container.createEl('button', { text: 'Sortear Carta' });
     button.onclick = () => {
       container.empty();
-      const [card] = drawCards(1);
+      const [card] = drawCards(1, this.deck);
       container.createEl('h2', { text: card.title });
       container.createEl('p', { text: card.description });
       container.createEl('em', { text: card.prompt });
