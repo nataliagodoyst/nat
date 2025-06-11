@@ -4,7 +4,8 @@ import { getSuggestions } from './context';
 
 interface Message {
   sender: 'user' | 'lumi';
-  text: string;
+  text?: string;
+  card?: OracleCard;
 }
 
 export class LumiModal extends Modal {
@@ -31,15 +32,17 @@ export class LumiModal extends Modal {
     this.messages.push({ sender: 'lumi', text });
   }
 
+  private addLumiCard(card: OracleCard) {
+    this.messages.push({ sender: 'lumi', card });
+  }
+
   private addUserMessage(text: string) {
     this.messages.push({ sender: 'user', text });
   }
 
   private draw(count: number) {
     const cards = drawCards(count, this.deck);
-    cards.forEach((card) =>
-      this.addLumiMessage(`${card.title} - ${card.description}\n${card.prompt}`)
-    );
+    cards.forEach((card) => this.addLumiCard(card));
   }
 
   private render() {
@@ -52,7 +55,22 @@ export class LumiModal extends Modal {
 
     const history = contentEl.createDiv();
     this.messages.forEach((m) => {
-      history.createEl('p', { text: `${m.sender === 'lumi' ? 'Lumi' : 'Você'}: ${m.text}` });
+      if (m.card) {
+        const cardEl = history.createDiv('oracle-card');
+        cardEl.createEl('div', {
+          text: m.card.title,
+          cls: 'oracle-card-title',
+        });
+        cardEl.createEl('div', { text: m.card.description });
+        cardEl.createEl('div', {
+          text: m.card.prompt,
+          cls: 'oracle-card-prompt',
+        });
+      } else if (m.text) {
+        history.createEl('p', {
+          text: `${m.sender === 'lumi' ? 'Lumi' : 'Você'}: ${m.text}`,
+        });
+      }
     });
 
     contentEl.createEl('p', { text: `Sua nota possui ${words} palavras.` });
@@ -68,6 +86,7 @@ export class LumiModal extends Modal {
       type: 'number',
       value: '1',
       attr: { min: '1', max: '3' },
+      cls: 'loomnotes-input',
     });
     const button = contentEl.createEl('button', {
       text: 'Sortear Carta',

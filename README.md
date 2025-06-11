@@ -42,11 +42,12 @@ Install each plugin from Obsidian's community plugins gallery and follow their s
 
 ## Styling
 
-The plugin includes a small `styles.css` file that colors the Lumi modal and side
-panel. If you prefer to use your own theme, remove this file from the plugin
-folder to disable the default styles. You can also override the classes
-`.loomnotes-modal`, `.loomnotes-panel` and `.loomnotes-button` in a snippet or
-your theme to customize the appearance.
+The plugin ships with a `styles.css` file that provides the LoomNotes look and
+feel. When the plugin is enabled this stylesheet is automatically applied to the
+Lumi modal, panel and oracle cards. If you prefer to use your own theme simply
+delete the file from the plugin folder. You can override the classes
+`.loomnotes-modal`, `.loomnotes-panel`, `.loomnotes-button` and the new card
+styles in a snippet or your theme.
 
 ## Development
 
