@@ -12,6 +12,14 @@
 /* Panel layout */
 .loomnotes-panel {
   overflow-y: auto;
+  max-height: 100%;
+}
+
+.loomnotes-input {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  padding: 4px;
+  margin-right: 0.5em;
 }
 
 /* Headings share the accent color */
@@ -29,4 +37,33 @@
   color: #fff;
   cursor: pointer;
   padding: 6px 12px;
+}
+
+/* Oracle card appearance */
+.oracle-card {
+  background-color: var(--loomnotes-card-bg, var(--background-secondary));
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  padding: 0.5em 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.oracle-card-title {
+  color: var(--loomnotes-accent);
+  font-weight: bold;
+}
+
+.oracle-card-prompt {
+  font-style: italic;
+  margin-top: 0.25em;
+}
+
+/* Template hint */
+.template-notice {
+  background-color: var(--background-secondary-alt);
+  color: var(--text-faint);
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin: 0.25em 0;
 }
