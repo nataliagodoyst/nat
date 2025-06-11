@@ -1,4 +1,3 @@
-import LoomNotesCompanion from '../main';
 
 jest.mock('../src/lumiModal', () => ({
   __esModule: true,
@@ -44,6 +43,8 @@ jest.mock('obsidian', () => ({
   },
   TFile: class {},
 }), { virtual: true });
+
+const LoomNotesCompanion = require('../main').default;
 
 describe('command registration', () => {
   class TestPlugin extends LoomNotesCompanion {
