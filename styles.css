@@ -1,8 +1,32 @@
-/*
+/* LoomNotes Companion default theme */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/* Shared variables */
+.loomnotes-modal,
+.loomnotes-panel {
+  --loomnotes-accent: #6a5acd;
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  padding: 1em;
+}
 
-If your plugin does not need CSS, delete this file.
+/* Panel layout */
+.loomnotes-panel {
+  overflow-y: auto;
+}
 
-*/
+/* Headings share the accent color */
+.loomnotes-modal h2,
+.loomnotes-panel h2 {
+  color: var(--loomnotes-accent);
+  margin-top: 0;
+}
+
+/* Styled action button */
+.loomnotes-button {
+  background-color: var(--loomnotes-accent);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  padding: 6px 12px;
+}

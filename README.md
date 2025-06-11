@@ -40,6 +40,14 @@ Install each plugin from Obsidian's community plugins gallery and follow their s
 4. Answer the prompt in the created note and use `LoomNotes: Puxar Carta` for extra insight.
 5. Explore Templater or Dataview to organise your reflections.
 
+## Styling
+
+The plugin includes a small `styles.css` file that colors the Lumi modal and side
+panel. If you prefer to use your own theme, remove this file from the plugin
+folder to disable the default styles. You can also override the classes
+`.loomnotes-modal`, `.loomnotes-panel` and `.loomnotes-button` in a snippet or
+your theme to customize the appearance.
+
 ## Development
 
 Install dependencies with `npm i` and start the watcher with `npm run dev`. Run the test suite with `npm test`.
