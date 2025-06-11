@@ -1,6 +1,7 @@
 import LoomNotesCompanion from '../main';
 
 jest.mock('../src/lumiModal', () => ({
+  __esModule: true,
   LumiModal: jest.fn().mockImplementation(() => ({ open: jest.fn() })),
 }));
 
