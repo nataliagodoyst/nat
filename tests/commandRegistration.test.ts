@@ -148,6 +148,36 @@ describe('command registration', () => {
     );
   });
 
+  test('loomnotes-draw-card uses plugin deck', async () => {
+    const replaceSelection = jest.fn();
+    const view = { editor: { replaceSelection } };
+    const customDeck = [
+      { title: 'J', description: 'K', prompt: 'L' },
+    ];
+    (drawCards as jest.Mock).mockReturnValue(customDeck);
+    const plugin = new TestPlugin({
+      workspace: { getActiveViewOfType: jest.fn(() => view) },
+    });
+    plugin.deck = customDeck as any;
+    plugin.addCommand = jest.fn();
+    plugin.registerView = jest.fn();
+    plugin.addSettingTab = jest.fn();
+    plugin.loadSettings = jest.fn();
+
+    await plugin.onload();
+
+    const call = (plugin.addCommand as jest.Mock).mock.calls.find(
+      ([cmd]) => cmd.id === 'loomnotes-draw-card'
+    );
+    expect(call).toBeDefined();
+
+    call[0].callback();
+    expect(drawCards).toHaveBeenCalledWith(1, customDeck);
+    expect(replaceSelection).toHaveBeenCalledWith(
+      '**J** - K\n_L_\n'
+    );
+  });
+
   test('loomnotes-open-reflection command invokes openReflection', async () => {
     const plugin = new TestPlugin({});
     plugin.addCommand = jest.fn();
