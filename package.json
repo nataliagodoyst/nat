@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-sample-plugin",
-  "version": "1.0.0",
-  "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+  "name": "loomnotes-companion",
+  "version": "0.1.0",
+  "description": "Companion plugin with Lumi assistant and oracle cards",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
