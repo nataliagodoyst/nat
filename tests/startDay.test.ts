@@ -34,7 +34,7 @@ jest.mock('obsidian', () => ({
   TFile: class {},
 }), { virtual: true });
 
-const LoomNotesCompanion = require('../main').default;
+import LoomNotesCompanion from '../main.ts';
 
 describe('startDay', () => {
   const date = '2024-01-01';
