@@ -44,7 +44,7 @@ jest.mock('obsidian', () => ({
   TFile: class {},
 }), { virtual: true });
 
-const LoomNotesCompanion = require('../main').default;
+import LoomNotesCompanion from '../main.ts';
 
 describe('command registration', () => {
   class TestPlugin extends LoomNotesCompanion {
