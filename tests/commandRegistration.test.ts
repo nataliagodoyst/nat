@@ -1,4 +1,3 @@
-
 jest.mock('../src/lumiModal', () => ({
   __esModule: true,
   LumiModal: jest.fn().mockImplementation(() => ({ open: jest.fn() })),
@@ -65,13 +64,21 @@ describe('command registration', () => {
     }
   }
 
-  test('loomnotes-start-day command triggers startDay', async () => {
-    const plugin = new TestPlugin({});
+  const setupPlugin = (app: any = {}) => {
+    const plugin = new TestPlugin(app);
     plugin.addCommand = jest.fn();
     plugin.registerView = jest.fn();
     plugin.addSettingTab = jest.fn();
     plugin.loadSettings = jest.fn();
+    return plugin;
+  };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('loomnotes-start-day command triggers startDay', async () => {
+    const plugin = setupPlugin({});
     await plugin.onload();
 
     const call = (plugin.addCommand as jest.Mock).mock.calls.find(
@@ -85,13 +92,7 @@ describe('command registration', () => {
   });
 
   test('open-lumi command opens LumiModal', async () => {
-    jest.clearAllMocks();
-    const plugin = new TestPlugin({});
-    plugin.addCommand = jest.fn();
-    plugin.registerView = jest.fn();
-    plugin.addSettingTab = jest.fn();
-    plugin.loadSettings = jest.fn();
-
+    const plugin = setupPlugin({});
     await plugin.onload();
 
     const call = (plugin.addCommand as jest.Mock).mock.calls.find(
@@ -100,18 +101,13 @@ describe('command registration', () => {
     expect(call).toBeDefined();
 
     call[0].callback();
+    expect(LumiModal).toHaveBeenCalledWith(plugin.app, plugin.deck);
     const modal = (LumiModal as jest.Mock).mock.results[0].value;
     expect(modal.open).toHaveBeenCalled();
   });
 
   test('toggle-lumi-panel command triggers toggleLumiPanel', async () => {
-    jest.clearAllMocks();
-    const plugin = new TestPlugin({});
-    plugin.addCommand = jest.fn();
-    plugin.registerView = jest.fn();
-    plugin.addSettingTab = jest.fn();
-    plugin.loadSettings = jest.fn();
-
+    const plugin = setupPlugin({});
     await plugin.onload();
 
     const call = (plugin.addCommand as jest.Mock).mock.calls.find(
@@ -125,19 +121,14 @@ describe('command registration', () => {
   });
 
   test('loomnotes-draw-card inserts drawn card into note', async () => {
-    jest.clearAllMocks();
     const card = { title: 'T', description: 'D', prompt: 'P' };
     (drawCards as jest.Mock).mockReturnValue([card]);
     const replaceSelection = jest.fn();
-    const plugin = new TestPlugin({
+    const plugin = setupPlugin({
       workspace: {
         getActiveViewOfType: jest.fn(() => ({ editor: { replaceSelection } })),
       },
     });
-    plugin.addCommand = jest.fn();
-    plugin.registerView = jest.fn();
-    plugin.addSettingTab = jest.fn();
-    plugin.loadSettings = jest.fn();
 
     await plugin.onload();
 
@@ -154,13 +145,7 @@ describe('command registration', () => {
   });
 
   test('loomnotes-open-reflection command invokes openReflection', async () => {
-    jest.clearAllMocks();
-    const plugin = new TestPlugin({});
-    plugin.addCommand = jest.fn();
-    plugin.registerView = jest.fn();
-    plugin.addSettingTab = jest.fn();
-    plugin.loadSettings = jest.fn();
-
+    const plugin = setupPlugin({});
     await plugin.onload();
 
     const call = (plugin.addCommand as jest.Mock).mock.calls.find(
@@ -173,13 +158,7 @@ describe('command registration', () => {
   });
 
   test('loomnotes-start-project command invokes promptAndStartProject', async () => {
-    jest.clearAllMocks();
-    const plugin = new TestPlugin({});
-    plugin.addCommand = jest.fn();
-    plugin.registerView = jest.fn();
-    plugin.addSettingTab = jest.fn();
-    plugin.loadSettings = jest.fn();
-
+    const plugin = setupPlugin({});
     await plugin.onload();
 
     const call = (plugin.addCommand as jest.Mock).mock.calls.find(
