@@ -1,4 +1,8 @@
-import LoomNotesCompanion from '../main';
+import { LumiModal } from '../src/lumiModal';
+import { updateIcons } from '../src/iconize';
+import { isTemplaterEnabled, showTemplatePicker } from '../src/templaterHelper';
+
+const LoomNotesCompanion = require('../main').default;
 
 jest.mock('../src/lumiModal', () => ({
   __esModule: true,
@@ -10,7 +14,7 @@ jest.mock('../src/iconize', () => ({
 }));
 
 jest.mock('../src/templaterHelper', () => ({
-  isTemplaterEnabled: () => false,
+  isTemplaterEnabled: jest.fn(),
   showTemplatePicker: jest.fn(),
 }));
 
@@ -78,5 +82,33 @@ describe('startDay', () => {
 
     await expect(plugin.startDay()).resolves.not.toThrow();
     expect(create).toHaveBeenCalled();
+  });
+
+  test('opens file and shows template when templater enabled', async () => {
+    (isTemplaterEnabled as jest.Mock).mockReturnValue(true);
+    const createFolder = jest.fn().mockResolvedValue(undefined);
+    const create = jest.fn().mockResolvedValue({});
+    const getAbstractFileByPath = jest
+      .fn()
+      .mockReturnValueOnce(null)
+      .mockReturnValueOnce(null);
+    const openFile = jest.fn();
+    const plugin = new TestPlugin({
+      vault: { getAbstractFileByPath, createFolder, create },
+      workspace: { getLeaf: jest.fn(() => ({ openFile })) },
+    });
+    plugin.settings = { dailyFolder: 'Diario', deckJSON: '' } as any;
+
+    await plugin.startDay();
+
+    expect(create).toHaveBeenCalledWith(
+      `Diario/${date}.md`,
+      expect.stringContaining(`# ${date}`)
+    );
+    expect(openFile).toHaveBeenCalled();
+    expect(updateIcons).toHaveBeenCalledWith(plugin.app, { Diario: 'calendar' });
+    expect(showTemplatePicker).toHaveBeenCalledWith(plugin.app);
+    const modal = (LumiModal as jest.Mock).mock.results[0].value;
+    expect(modal.open).toHaveBeenCalled();
   });
 });
