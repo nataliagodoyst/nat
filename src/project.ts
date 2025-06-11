@@ -4,10 +4,12 @@ import { updateIcons } from './iconize';
 export async function startProject(app: App, name: string, baseFolder = 'Projetos'): Promise<TFile | null> {
   if (!name) return null;
   const folderPath = `${baseFolder}/${name}`;
-  try {
-    await app.vault.adapter.mkdir(folderPath);
-  } catch (e) {
-    // ignore if folder exists
+  if (!app.vault.getAbstractFileByPath(folderPath)) {
+    try {
+      await app.vault.createFolder(folderPath);
+    } catch (e) {
+      // ignore if folder exists or cannot be created
+    }
   }
   updateIcons(app, { [baseFolder]: 'folder', [folderPath]: 'folder' });
   const path = `${folderPath}/index.md`;
