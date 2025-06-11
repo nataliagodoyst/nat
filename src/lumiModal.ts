@@ -1,35 +1,82 @@
 import { App, Modal, MarkdownView } from 'obsidian';
 import { drawCards, OracleCard, defaultDeck } from './oracle';
+import { getSuggestions } from './context';
+
+interface Message {
+  sender: 'user' | 'lumi';
+  text: string;
+}
 
 export class LumiModal extends Modal {
   deck: OracleCard[];
+  messages: Message[] = [];
+  countInput: HTMLInputElement | null = null;
   constructor(app: App, deck: OracleCard[] = defaultDeck) {
     super(app);
     this.deck = deck;
   }
 
   onOpen(): void {
+    this.contentEl.addClass('loomnotes-modal');
+    this.addLumiMessage('Olá, eu sou Lumi ✨');
+    this.render();
+  }
+
+  onClose(): void {
+    this.messages = [];
+    this.contentEl.empty();
+  }
+
+  private addLumiMessage(text: string) {
+    this.messages.push({ sender: 'lumi', text });
+  }
+
+  private addUserMessage(text: string) {
+    this.messages.push({ sender: 'user', text });
+  }
+
+  private draw(count: number) {
+    const cards = drawCards(count, this.deck);
+    cards.forEach((card) =>
+      this.addLumiMessage(`${card.title} - ${card.description}\n${card.prompt}`)
+    );
+  }
+
+  private render() {
     const { contentEl } = this;
+    contentEl.empty();
+
     const active = this.app.workspace.getActiveViewOfType(MarkdownView);
     const text = active?.editor.getValue() || '';
     const words = text.split(/\s+/).filter(Boolean).length;
-    contentEl.addClass('loomnotes-modal');
-    contentEl.createEl('h2', { text: 'Olá, eu sou Lumi ✨' });
+
+    const history = contentEl.createDiv();
+    this.messages.forEach((m) => {
+      history.createEl('p', { text: `${m.sender === 'lumi' ? 'Lumi' : 'Você'}: ${m.text}` });
+    });
+
     contentEl.createEl('p', { text: `Sua nota possui ${words} palavras.` });
+
+    const suggestions = getSuggestions(text);
+    if (suggestions.length) {
+      contentEl.createEl('h4', { text: 'Sugestões:' });
+      const list = contentEl.createEl('ul');
+      suggestions.forEach((s) => list.createEl('li', { text: s }));
+    }
+
+    this.countInput = contentEl.createEl('input', {
+      type: 'number',
+      value: '1',
+      attr: { min: '1', max: '3' },
+    });
     const button = contentEl.createEl('button', {
       text: 'Sortear Carta',
       cls: 'loomnotes-button',
     });
     button.onclick = () => {
-      contentEl.empty();
-      const [card] = drawCards(1, this.deck);
-      contentEl.createEl('h2', { text: card.title });
-      contentEl.createEl('p', { text: card.description });
-      contentEl.createEl('em', { text: card.prompt });
+      const count = parseInt(this.countInput?.value || '1', 10) || 1;
+      this.draw(count);
+      this.render();
     };
-  }
-
-  onClose(): void {
-    this.contentEl.empty();
   }
 }
