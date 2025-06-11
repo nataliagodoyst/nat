@@ -19,14 +19,18 @@ export class LumiPanel extends ItemView {
   }
 
   async onOpen(): Promise<void> {
-    const container = this.containerEl.children[1];
+    const container = this.containerEl.children[1] as HTMLElement;
     container.empty();
+    container.addClass('loomnotes-panel');
     const active = this.app.workspace.getActiveViewOfType(MarkdownView);
     const text = active?.editor.getValue() || '';
     const words = text.split(/\s+/).filter(Boolean).length;
     container.createEl('h2', { text: 'Olá, eu sou Lumi ✨' });
     container.createEl('p', { text: `Sua nota possui ${words} palavras.` });
-    const button = container.createEl('button', { text: 'Sortear Carta' });
+    const button = container.createEl('button', {
+      text: 'Sortear Carta',
+      cls: 'loomnotes-button',
+    });
     button.onclick = () => {
       container.empty();
       const [card] = drawCards(1, this.deck);

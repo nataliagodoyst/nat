@@ -13,9 +13,13 @@ export class LumiModal extends Modal {
     const active = this.app.workspace.getActiveViewOfType(MarkdownView);
     const text = active?.editor.getValue() || '';
     const words = text.split(/\s+/).filter(Boolean).length;
+    contentEl.addClass('loomnotes-modal');
     contentEl.createEl('h2', { text: 'Olá, eu sou Lumi ✨' });
     contentEl.createEl('p', { text: `Sua nota possui ${words} palavras.` });
-    const button = contentEl.createEl('button', { text: 'Sortear Carta' });
+    const button = contentEl.createEl('button', {
+      text: 'Sortear Carta',
+      cls: 'loomnotes-button',
+    });
     button.onclick = () => {
       contentEl.empty();
       const [card] = drawCards(1, this.deck);
