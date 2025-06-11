@@ -9,6 +9,7 @@ import {
 } from 'obsidian';
 import { LumiModal } from './src/lumiModal';
 import { drawCards } from './src/oracle';
+import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
 
 interface LoomNotesSettings {
   dailyFolder: string;
@@ -24,11 +25,19 @@ export default class LoomNotesCompanion extends Plugin {
   async onload() {
     await this.loadSettings();
 
+    this.registerView(VIEW_TYPE_LUMI, (leaf) => new LumiPanel(leaf));
+
     this.addCommand({
       id: 'open-lumi',
       name: 'LoomNotes: Refletir com Lumi',
-      hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'L' }],
       callback: () => new LumiModal(this.app).open(),
+    });
+
+    this.addCommand({
+      id: 'toggle-lumi-panel',
+      name: 'LoomNotes: Alternar Painel Lumi',
+      hotkeys: [{ modifiers: ['Mod', 'Shift'], key: 'L' }],
+      callback: () => this.toggleLumiPanel(),
     });
 
     this.addCommand({
@@ -67,7 +76,22 @@ export default class LoomNotesCompanion extends Plugin {
     new LumiModal(this.app).open();
   }
 
-  onunload() {}
+  async toggleLumiPanel() {
+    const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_LUMI);
+    if (leaves.length > 0) {
+      leaves.forEach((l) => l.detach());
+      return;
+    }
+    const leaf = this.app.workspace.getRightLeaf(false);
+    await leaf.setViewState({ type: VIEW_TYPE_LUMI, active: true });
+    this.app.workspace.revealLeaf(leaf);
+  }
+
+  onunload() {
+    this.app.workspace
+      .getLeavesOfType(VIEW_TYPE_LUMI)
+      .forEach((leaf) => leaf.detach());
+  }
 
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
