@@ -11,6 +11,8 @@ import { LumiModal } from './src/lumiModal';
 import { drawCards } from './src/oracle';
 import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
 import { isTemplaterEnabled, showTemplatePicker } from './src/templaterHelper';
+import { openReflection } from './src/reflection';
+import { promptAndStartProject } from './src/project';
 
 interface LoomNotesSettings {
   dailyFolder: string;
@@ -59,6 +61,18 @@ export default class LoomNotesCompanion extends Plugin {
       id: 'loomnotes-start-day',
       name: 'LoomNotes: Iniciar Dia',
       callback: () => this.startDay(),
+    });
+
+    this.addCommand({
+      id: 'loomnotes-open-reflection',
+      name: 'LoomNotes: Abrir Reflexão',
+      callback: () => openReflection(this.app),
+    });
+
+    this.addCommand({
+      id: 'loomnotes-start-project',
+      name: 'LoomNotes: Iniciar Projeto',
+      callback: () => promptAndStartProject(this.app),
     });
 
     this.addSettingTab(new LoomNotesSettingTab(this.app, this));
