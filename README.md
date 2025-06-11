@@ -52,6 +52,12 @@ your theme to customize the appearance.
 
 Install dependencies with `npm i` and start the watcher with `npm run dev`. Run the test suite with `npm test`.
 
+To release a new version run `npm version <patch|minor|major>`. This command
+updates `package.json` and executes `version-bump.mjs`, which copies the version
+to `manifest.json` and records it in `versions.json`. Inspect those files or run
+`git diff HEAD` to verify the changes. Push the resulting commit and tag with
+`git push --follow-tags`, ensuring `versions.json` is included in the release.
+
 ## API Documentation
 
 See [Obsidian API](https://github.com/obsidianmd/obsidian-api).
