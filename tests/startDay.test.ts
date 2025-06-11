@@ -101,10 +101,10 @@ describe('startDay', () => {
 
     await plugin.startDay();
 
-    expect(create).toHaveBeenCalledWith(
-      `Diario/${date}.md`,
-      expect.stringContaining(`# ${date}`)
-    );
+    const call = (create as jest.Mock).mock.calls[0];
+    expect(call[0]).toBe(`Diario/${date}.md`);
+    expect(call[1]).toContain(`# ${date}`);
+    expect(call[1]).toContain('Como você se sente hoje?');
     expect(openFile).toHaveBeenCalled();
     expect(updateIcons).toHaveBeenCalledWith(plugin.app, { Diario: 'calendar' });
     expect(showTemplatePicker).toHaveBeenCalledWith(plugin.app);
