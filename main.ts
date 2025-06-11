@@ -13,6 +13,7 @@ import { LumiPanel, VIEW_TYPE_LUMI } from './src/lumiPanel';
 import { isTemplaterEnabled, showTemplatePicker } from './src/templaterHelper';
 import { openReflection } from './src/reflection';
 import { promptAndStartProject } from './src/project';
+import { updateIcons } from './src/iconize';
 
 interface LoomNotesSettings {
   dailyFolder: string;
@@ -86,6 +87,7 @@ export default class LoomNotesCompanion extends Plugin {
     if (!file) {
       file = await this.app.vault.create(path, `# ${date}\n\nComo você se sente hoje?\n`);
     }
+    updateIcons(this.app, { [folder]: 'calendar' });
     const leaf = this.app.workspace.getLeaf(true);
     await leaf.openFile(file);
     if (isTemplaterEnabled(this.app)) {

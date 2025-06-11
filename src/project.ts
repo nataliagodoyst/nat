@@ -1,4 +1,5 @@
 import { App, TFile } from 'obsidian';
+import { updateIcons } from './iconize';
 
 export async function startProject(app: App, name: string, baseFolder = 'Projetos'): Promise<TFile | null> {
   if (!name) return null;
@@ -8,6 +9,7 @@ export async function startProject(app: App, name: string, baseFolder = 'Projeto
   } catch (e) {
     // ignore if folder exists
   }
+  updateIcons(app, { [baseFolder]: 'folder', [folderPath]: 'folder' });
   const path = `${folderPath}/index.md`;
   let file = app.vault.getAbstractFileByPath(path) as TFile;
   if (!file) {
